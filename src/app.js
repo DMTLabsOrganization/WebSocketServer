@@ -14,6 +14,11 @@ const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     console.log('New client connected');
 
+    ws.on('message', (message) => {
+        console.log('Received message from client:', message);
+        // Здесь можно добавить логику для обработки сообщений от клиента
+    });
+
     ws.on('close', () => {
         console.log('Client disconnected');
     });
