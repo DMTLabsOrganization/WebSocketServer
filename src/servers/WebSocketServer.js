@@ -12,7 +12,6 @@ class WebSocketServer {
         const ip = req.socket.remoteAddress; // Получаем IP-адрес клиента
         console.log(`Client joined with IP: ${ip}`);
 
-        // Сохраняем соединение в Map
         this.clients.set(ip, ws);
 
         ws.on('message', this.handleMessage.bind(this));

@@ -6,22 +6,17 @@ const PostbackHandler = require('./handlers/PostbackHandler');
 const app = express();
 const port = 3000;
 
-// Настройка Body Parser для обработки JSON-запросов
 app.use(express.json());
-
-// Создание HTTP-сервера
 const server = createServer(app);
-
-// Создание и настройка WebSocket сервера
 const wsServer = new WebSocketServer(server);
-
-// Создание обработчика Postback запросов
 const postbackHandler = new PostbackHandler(wsServer);
 
 // Обработка POST-запросов от Keitaro
+
+// http://localhost:3000/keitaro?ip=192.168.0.1 - example of request
+// http://localhost:3000/keitaro?ip={ip} - example of request for Keitaro
 app.post('/keitaro', (req, res) => postbackHandler.handle(req, res));
 
-// Запуск HTTP-сервера
 server.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
 });
