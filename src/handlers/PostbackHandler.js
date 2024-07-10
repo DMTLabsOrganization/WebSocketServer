@@ -1,5 +1,3 @@
-const { Console } = require("console");
-
 class PostbackHandler {
     constructor(webSocketServer) {
         this.webSocketServer = webSocketServer;
@@ -7,12 +5,15 @@ class PostbackHandler {
 
     handle(req, res) {
         const data = req.body;
-        this.webSocketServer.broadcast(data);
-        
-        // Отправка сообщения "purchase" всем клиентам при успешном POST-запросе
-        this.webSocketServer.broadcast({ message: 'purchase' });
+        const userIp = req.query.ip; // Получаем IP-адрес пользователя из запроса
 
-        console.log("PRISHLO!!!!");
+        if (!userIp) {
+            res.status(400).send('IP address is required');
+            return;
+        }
+
+        // Отправка сообщения "purchase" только клиенту с указанным IP-адресом
+        this.webSocketServer.sendToClientByIp(userIp, { message: 'purchase' });
 
         res.status(200).send('Postback received');
     }
